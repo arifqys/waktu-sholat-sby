@@ -1,0 +1,17 @@
+@tailwind base;
+
+@tailwind components;
+
+.card {
+    @apply bg-white m-3 p-5 rounded shadow-md;
+}
+.card:hover {
+    @apply shadow-lg;
+}
+@screen md {
+    .card {
+        @apply p-10;
+    }
+}
+
+@tailwind utilities;
