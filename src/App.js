@@ -7,12 +7,19 @@ const App = () => {
   const [isLoaded, setisLoaded] = useState(false)
   
   useEffect(() => {
-    axios.get(`https://muslimsalat.com/surabaya/daily.json?key=${process.env.REACT_APP_API_KEY}`)
+    axios.defaults.baseURL = "https://api.aladhan.com/v1/";
+    axios.get("currentTimestamp?zone=Asia/Jakarta")
       .then(res => {
-        setData(res.data.items[0])
-        setisLoaded(true)
+        const timestamp = res.data.data;
+        if (!!timestamp) {
+          axios.get(`timingsByCity/${timestamp}?city=Surabaya&country=ID`)
+            .then(res => {
+              setData(res.data.data.timings);
+              setisLoaded(true);
+            })
+        }
       })
-  }, [data])
+  }, [])
 
   const now = new Date()
 
@@ -26,23 +33,23 @@ const App = () => {
       <div className="flex flex-col sm:flex-row justify-center flex-wrap py-4">
         <div className="card">
           Shubuh
-          <p>{isLoaded ? data.fajr : null}</p>
+          <p>{isLoaded ? data.Fajr : null}</p>
         </div>
         <div className="card">
           Dhuhur
-          <p>{isLoaded ? data.dhuhr : null}</p>
+          <p>{isLoaded ? data.Dhuhr : null}</p>
         </div>
         <div className="bg-white m-3 p-5 sm:p-10 rounded shadow-md hover:shadow-lg">
           Ashar
-          <p>{isLoaded ? data.asr : null}</p>
+          <p>{isLoaded ? data.Asr : null}</p>
         </div>
         <div className="bg-white m-3 p-5 sm:p-10 rounded shadow-md hover:shadow-lg">
           Maghrib
-          <p>{isLoaded ? data.maghrib : null}</p>
+          <p>{isLoaded ? data.Maghrib : null}</p>
         </div>
         <div className="bg-white m-3 p-5 sm:p-10 rounded shadow-md hover:shadow-lg">
           Isya
-          <p>{isLoaded ? data.isha : null}</p>
+          <p>{isLoaded ? data.Isha : null}</p>
         </div>
       </div>
 
